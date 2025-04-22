@@ -9,7 +9,7 @@ import { Product, ProductDocument, ProductCreateRequestSchema } from './product.
 export class ProductService {
 
   constructor(
-    @InjectModel(Product.name) private readonly model: Model<Product>,
+    @InjectModel(Product.name) private readonly model: Model<Product>
   ) {}
 
   public async create(data: z.infer<typeof ProductCreateRequestSchema>): Promise<ProductDocument> {

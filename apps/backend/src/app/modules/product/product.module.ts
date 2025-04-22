@@ -19,7 +19,7 @@ import { ProductController } from './product.controller';
       useFactory: async (seederService: SeederService) => {
         await seederService.seedProducts();
         return ProductSchema;
-      },
+      }
     }]),
   ],
   controllers: [
