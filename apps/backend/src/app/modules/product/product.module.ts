@@ -9,7 +9,8 @@ import { SeederService } from '../../services/seeder.service';
 import { ProductService } from './product.service';
 
 // Controllers
-import { ProductController } from './product.controller';
+import { ProductController } from './controllers/product.controller';
+import { ProductsController } from './controllers/products.controller';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { ProductController } from './product.controller';
     }]),
   ],
   controllers: [
-    ProductController
+    ProductController,
+    ProductsController
   ],
   providers: [
     ProductService

@@ -26,4 +26,8 @@ export class ProductService {
   public findById(_id: string): Promise<ProductDocument | null> {
     return this.model.findOne({ _id });
   }
+
+  public list(): Promise<ProductDocument[]> {
+    return this.model.find({});
+  }
 }

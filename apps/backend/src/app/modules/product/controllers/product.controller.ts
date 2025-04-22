@@ -3,11 +3,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { z } from 'zod';
 
-import { ObjectIdSchema } from '../../data/common.schema';
-import { ProductCreateRequestSchema } from './product.schema';
+import { ObjectIdSchema } from '../../../data/common.schema';
+import { ProductCreateRequestSchema } from '../product.schema';
 
-import { ProductService } from './product.service';
-import { ProductPresenter } from './product.presenter';
+import { ProductService } from '../product.service';
+import { ProductPresenter } from '../product.presenter';
 
 type ProductDTO = z.infer<typeof ProductCreateRequestSchema>;
 
@@ -38,8 +38,12 @@ export class ProductController {
   async getProduct(
     @Param('id', new ZodValidationPipe(ObjectIdSchema)) id: string
   ): Promise<ProductDTO | HttpException> {
-    const product = await this.productService.findById(id);
-    if (!product) throw new HttpException('Product not found', HttpStatus.NOT_FOUND)
-    return ProductPresenter(product);
+    try {
+      const product = await this.productService.findById(id);
+      if (!product) throw new HttpException('Product not found', HttpStatus.NOT_FOUND)
+      return ProductPresenter(product);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
