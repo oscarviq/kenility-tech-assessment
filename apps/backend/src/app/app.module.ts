@@ -5,11 +5,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 // Utils
 import DatabaseUtil from './utils/database';
 
-// Controllers
-import { AppController } from './app.controller';
-
-// Services
-import { AppService } from './app.service';
+// Modules
+import { GlobalModule } from './global.module';
+import { ProductModule } from './modules/product/product.module';
 
 @Module({
   imports: [
@@ -19,13 +17,11 @@ import { AppService } from './app.service';
       pass: process.env.MONGO_PASS,
       dbName: process.env.MONGO_DATABASE,
       onConnectionCreate: DatabaseUtil.onConnectionCreate
-    })
-  ],
-  controllers: [
-    AppController
-  ],
-  providers: [
-    AppService
-  ],
+    }),
+
+    // Modules
+    GlobalModule,
+    ProductModule
+  ]
 })
 export class AppModule {}
