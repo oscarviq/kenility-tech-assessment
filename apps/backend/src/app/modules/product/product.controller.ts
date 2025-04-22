@@ -1,4 +1,5 @@
-import { Controller, Post, Body, Get, Param, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, UseGuards, Post, Body, Get, Param, HttpException, HttpStatus } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { z } from 'zod';
 
@@ -17,6 +18,7 @@ export class ProductController {
     private readonly productService: ProductService
   ) { }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   async createProduct(
     @Body(new ZodValidationPipe(ProductCreateRequestSchema)) data: ProductDTO
@@ -31,6 +33,7 @@ export class ProductController {
     }
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   async getProduct(
     @Param('id', new ZodValidationPipe(ObjectIdSchema)) id: string

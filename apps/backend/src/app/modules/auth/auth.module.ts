@@ -7,6 +7,9 @@ import { UserModule } from '../user/user.module';
 // Services
 import { AuthService } from './auth.service';
 
+// Strategies
+import { AuthStrategy } from './auth.strategy';
+
 // Controllers
 import { AuthController } from './auth.controller';
 
@@ -24,7 +27,8 @@ import { AuthController } from './auth.controller';
     AuthController
   ],
   providers: [
-    AuthService
+    AuthService,
+    AuthStrategy
   ]
 })
 export class AuthModule {}
