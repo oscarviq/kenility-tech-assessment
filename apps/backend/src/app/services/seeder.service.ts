@@ -4,7 +4,7 @@ import { Connection } from 'mongoose';
 import { faker } from '@faker-js/faker';
 
 // Models
-import { Product, ProductSchema } from '../modules/product/models/product';
+import { Product, ProductSchema } from '../modules/product/product.schema';
 
 @Injectable()
 export class SeederService {
