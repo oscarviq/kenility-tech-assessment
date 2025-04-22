@@ -23,7 +23,7 @@ export class ProductController {
   ): Promise<ProductDTO | HttpException> {
     try {
       return ProductPresenter(await this.productService.create(data));
-    } catch (error: any) {
+    } catch (error) {
       throw new HttpException(
         error.message === 'already_exists' ? 'A product with that name already exists' : 'Could not create product',
         error.message === 'already_exists' ? HttpStatus.BAD_REQUEST : HttpStatus.INTERNAL_SERVER_ERROR

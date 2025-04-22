@@ -1,6 +1,6 @@
-import { ProductResponseSchema } from './product.schema';
+import { ProductDocument, ProductResponseSchema } from './product.schema';
 
-export const ProductPresenter = (product: any) => {
+export const ProductPresenter = (product: ProductDocument) => {
   return ProductResponseSchema.parse({
     id: product._id.toString(),
     name: product.name,
