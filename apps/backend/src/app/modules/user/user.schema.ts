@@ -32,7 +32,8 @@ export const UserCreateRequestSchema = z.object({
 
 export const UserResponseSchema = z.object({
   id: ObjectIdSchema,
-  name: z.string(),
+  email: z.string(),
   firstName: z.string(),
-  lastName: z.string()
+  lastName: z.string(),
+  accessToken: z.string().optional().nullable(),
 });

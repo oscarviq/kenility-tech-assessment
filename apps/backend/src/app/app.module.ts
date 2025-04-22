@@ -8,6 +8,7 @@ import DatabaseUtil from './utils/database';
 // Modules
 import { GlobalModule } from './global.module';
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
 
 @Module({
@@ -23,6 +24,7 @@ import { ProductModule } from './modules/product/product.module';
     // Modules
     GlobalModule,
     UserModule,
+    AuthModule,
     ProductModule,
   ]
 })
