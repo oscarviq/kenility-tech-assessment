@@ -3,7 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { z } from 'zod';
 
-import { Order, OrderCreateRequestSchema, OrderDocument } from './order.schema';
+import { Order, OrderCreateRequestSchema, OrderDocument, OrderUpdateRequestSchema } from './order.schema';
+import { ProductDocument } from '../product/product.schema';
 import { UserService } from '../user/user.service';
 import { ProductService } from '../product/product.service';
 
@@ -16,20 +17,29 @@ export class OrderService {
     private readonly productService: ProductService
   ) {}
 
+  private async validateProducts(requestedProducts: string[]): Promise<ProductDocument[]> {
+    const products = await this.productService.findManyById(requestedProducts);
+    if (products.length !== requestedProducts.length) throw new Error('product_not_found');
+    return products;
+  }
+
+  private getOrderTotal(products: ProductDocument[]) {
+    const total = products.reduce((sum, product) => sum + product.price, 0);
+    return total.toFixed(2);
+  }
+
   public async create(data: z.infer<typeof OrderCreateRequestSchema>): Promise<OrderDocument> {
+    if (!data.products.length) throw new Error('no_products');
     if (new Set(data.products).size !== data.products.length) throw new Error('duplicate_products');
 
     const user = await this.userService.findById(data.client);
     if (!user) throw new Error('client_not_found');
 
-    const products = await this.productService.findManyById(data.products);
-    if (products.length !== data.products.length) throw new Error('product_not_found');
-
-    const total = products.reduce((sum, product) => sum + product.price, 0);
+    const products = await this.validateProducts(data.products);
 
     const newOrder = await this.model.create({
       ...data,
-      total: total.toFixed(2)
+      total: this.getOrderTotal(products)
     });
 
     return await this.findById(newOrder._id.toString()) as unknown as OrderDocument;
@@ -41,5 +51,20 @@ export class OrderService {
 
   public list(): Promise<OrderDocument[]> {
     return this.model.find({}).populate(['client', 'products']);
+  }
+
+  public async update(id: string, data: z.infer<typeof OrderUpdateRequestSchema>): Promise<OrderDocument> {
+    if (!data.products.length) throw new Error('no_products');
+    if (new Set(data.products).size !== data.products.length) throw new Error('duplicate_products');
+
+    const order = await this.findById(id);
+    if (!order) throw new Error('order_not_found');
+
+    const products = await this.validateProducts(data.products);
+
+    return this.model.findByIdAndUpdate(id, {
+      ...data,
+      total: this.getOrderTotal(products)
+    }, { new: true }).populate(['client', 'products']) as unknown as OrderDocument;
   }
 }

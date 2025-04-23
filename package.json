@@ -2,7 +2,9 @@
   "name": "@kenility-tech-assessment/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "docker:up": "docker compose -p kenility-oscar-viquez up -d"
+  },
   "private": true,
   "dependencies": {
     "@faker-js/faker": "^9.7.0",

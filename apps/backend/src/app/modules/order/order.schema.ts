@@ -28,6 +28,10 @@ export const OrderCreateRequestSchema = z.object({
   products: z.array(z.string())
 });
 
+export const OrderUpdateRequestSchema = z.object({
+  products: z.array(z.string())
+});
+
 export const OrderResponseSchema = z.object({
   id: ObjectIdSchema,
   clientName: z.string(),
