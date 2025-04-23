@@ -63,7 +63,8 @@ export class SeederService {
       const productsSeed = Array.from({ length: 10 }, () => ({
         name: faker.commerce.productName(),
         sku: faker.commerce.isbn(),
-        price: faker.commerce.price({ min: 20, max: 200 })
+        price: faker.commerce.price({ min: 20, max: 200 }),
+        imagePath: 'uploads/products/default_product_image.png'
       }));
 
       this.productsSeed = await ProductModel.insertMany(productsSeed);

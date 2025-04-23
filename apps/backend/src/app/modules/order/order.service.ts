@@ -95,7 +95,7 @@ export class OrderService {
     ]);
 
     return {
-      lastMonthTotal: result[0].accumulatedTotal,
+      lastMonthTotal: result[0].accumulatedTotal.toFixed(2),
       highestAmountOrder: await this.model.populate(result[0].highestSellingOrder, [
         { path: 'client' },
         { path: 'products' }
