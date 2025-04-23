@@ -1,5 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { MulterModule } from '@nestjs/platform-express';
+
+// Utils
+import { MulterModuleOptions } from '../../utils/image-uploads';
 
 // Schema
 import { Product, ProductSchema } from './product.schema';
@@ -22,6 +26,7 @@ import { ProductsController } from './controllers/products.controller';
         return ProductSchema;
       }
     }]),
+    MulterModule.register(MulterModuleOptions)
   ],
   controllers: [
     ProductController,

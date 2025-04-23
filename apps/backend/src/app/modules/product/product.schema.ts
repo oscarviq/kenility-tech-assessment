@@ -26,13 +26,13 @@ export type ProductDocument = HydratedDocument<Product>;
 export const ProductCreateRequestSchema = z.object({
   name: z.string(),
   sku: z.string(),
-  price: z.number()
+  price: z.preprocess((val) => Number(val), z.number())
 });
 
 export const ProductResponseSchema = z.object({
   id: ObjectIdSchema,
   name: z.string(),
   sku: z.string(),
-  price: z.number(),
-  imagePath: z.string().nullable().optional()
+  price: z.preprocess((val) => Number(val), z.number()),
+  imagePath: z.string()
 });
