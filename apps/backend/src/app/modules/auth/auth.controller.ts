@@ -1,4 +1,5 @@
 import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
+import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { z } from 'zod';
 
@@ -7,6 +8,7 @@ import { UserResponseSchema } from '../user/user.schema';
 
 import { AuthService } from './auth.service';
 import { UserPresenter } from '../user/user.presenter';
+import { ZtoOAPI } from '../../utils/open-api';
 
 type CredentialsDTO = z.infer<typeof LoginRequestSchema>;
 type UserWithTokenDTO = z.infer<typeof UserResponseSchema>;
@@ -18,6 +20,12 @@ export class AuthController {
     private readonly authService: AuthService
   ) {}
 
+  @ApiBody({
+    schema: ZtoOAPI('CredentialsDTO', LoginRequestSchema)
+  })
+  @ApiResponse({
+    schema: ZtoOAPI('UserDTO', UserResponseSchema)
+  })
   @Post('login')
   async login(
     @Body(new ZodValidationPipe(LoginRequestSchema)) credentials: CredentialsDTO

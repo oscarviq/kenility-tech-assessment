@@ -1,5 +1,6 @@
 import { Controller, UseGuards, Post, Body, Get, Param, HttpException, HttpStatus } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { z } from 'zod';
 
@@ -8,6 +9,7 @@ import { OrderCreateRequestSchema, OrderResponseSchema, OrderUpdateRequestSchema
 
 import { OrderService } from '../order.service';
 import { OrderPresenter } from '../order.presenter';
+import { ZtoOAPI } from '../../../utils/open-api';
 
 type OrderRequestDTO = z.infer<typeof OrderCreateRequestSchema>;
 type OrderResponseDTO = z.infer<typeof OrderResponseSchema>;
@@ -21,6 +23,13 @@ export class OrderController {
   ) { }
 
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  @ApiBody({
+    schema: ZtoOAPI('OrderRequestDTO', OrderCreateRequestSchema)
+  })
+  @ApiResponse({
+    schema: ZtoOAPI('OrderResponseDTO', OrderResponseSchema)
+  })
   @Post()
   async createOrder(
     @Body(new ZodValidationPipe(OrderCreateRequestSchema)) data: OrderRequestDTO,
@@ -58,6 +67,14 @@ export class OrderController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  @ApiParam({
+    name: 'id',
+    schema: ZtoOAPI('OrderRequestDTO', ObjectIdSchema.openapi({ description: 'Order id', example: '6808c3dfaa3823a1e4ae959e' }))
+  })
+  @ApiResponse({
+    schema: ZtoOAPI('OrderResponseDTO', OrderResponseSchema)
+  })
   @Get(':id')
   async getOrder(
     @Param('id', new ZodValidationPipe(ObjectIdSchema)) id: string
@@ -72,6 +89,14 @@ export class OrderController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  @ApiParam({
+    name: 'id',
+    schema: ZtoOAPI('OrderRequestDTO', ObjectIdSchema.openapi({ description: 'Order id', example: '6808c3dfaa3823a1e4ae959e' }))
+  })
+  @ApiResponse({
+    schema: ZtoOAPI('OrderResponseDTO', OrderResponseSchema)
+  })
   @Post(':id')
   async updateOrder(
     @Param('id', new ZodValidationPipe(ObjectIdSchema)) id: string,

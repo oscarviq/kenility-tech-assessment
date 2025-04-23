@@ -1,8 +1,10 @@
 import { Controller, UseGuards, Get, HttpException, HttpStatus } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { z } from 'zod';
 
 import { OrderResponseSchema, StatsResponseSchema } from '../order.schema';
+import { ZtoOAPI } from '../../../utils/open-api';
 
 import { OrderService } from '../order.service';
 import { OrderPresenter } from '../order.presenter';
@@ -18,6 +20,10 @@ export class OrdersController {
   ) { }
 
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  @ApiResponse({
+    schema: ZtoOAPI('ProductResponseDTO', z.array(OrderResponseSchema)),
+  })
   @Get('')
   async list(): Promise<OrderResponseDTO[] | HttpException> {
     try {
@@ -29,6 +35,10 @@ export class OrdersController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
+  @ApiResponse({
+    schema: ZtoOAPI('StatsResponseDTO', z.array(StatsResponseSchema)),
+  })
   @Get('stats')
   async getStats(): Promise<StatsResponseDTO | HttpException> {
     try {
