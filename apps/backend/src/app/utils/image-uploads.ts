@@ -8,7 +8,7 @@ import { ParseFilePipe, MaxFileSizeValidator } from '@nestjs/common';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, '/uploads/products');
+    const uploadDir = path.join(__dirname, '..', '/uploads/products');
     if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
     cb(null, uploadDir);
   },

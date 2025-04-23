@@ -22,7 +22,7 @@ export class ProductService {
 
     return this.model.create({
       ...data,
-      imagePath: path.relative(__dirname, data.imagePath),
+      imagePath: path.relative(path.join(__dirname, '..'), data.imagePath),
     });
   }
 

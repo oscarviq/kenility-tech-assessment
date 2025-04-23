@@ -46,3 +46,6 @@ vitest.config.*.timestamp*
 
 # Environments files
 **/.env*
+
+# File Uploads
+**/uploads

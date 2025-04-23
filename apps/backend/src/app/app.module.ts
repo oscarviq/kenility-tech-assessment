@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 // Utils
 import DatabaseUtil from './utils/database';
@@ -19,6 +21,10 @@ import { ProductModule } from './modules/product/product.module';
       pass: process.env.MONGO_PASS,
       dbName: process.env.MONGO_DATABASE,
       onConnectionCreate: DatabaseUtil.onConnectionCreate
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
     }),
 
     // Modules
