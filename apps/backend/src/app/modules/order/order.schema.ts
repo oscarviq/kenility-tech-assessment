@@ -38,3 +38,8 @@ export const OrderResponseSchema = z.object({
   products: z.array(ProductResponseSchema),
   total: z.number()
 });
+
+export const StatsResponseSchema = z.object({
+  lastMonthTotal: z.number(),
+  highestAmountOrder: OrderResponseSchema
+});

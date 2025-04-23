@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { z } from 'zod';
 
-import { Order, OrderCreateRequestSchema, OrderDocument, OrderUpdateRequestSchema } from './order.schema';
+import { Order, OrderCreateRequestSchema, OrderDocument, OrderUpdateRequestSchema, StatsResponseSchema } from './order.schema';
 import { ProductDocument } from '../product/product.schema';
 import { UserService } from '../user/user.service';
 import { ProductService } from '../product/product.service';
@@ -66,5 +66,40 @@ export class OrderService {
       ...data,
       total: this.getOrderTotal(products)
     }, { new: true }).populate(['client', 'products']) as unknown as OrderDocument;
+  }
+
+  public async getStats(): Promise<{
+    lastMonthTotal: number,
+    highestAmountOrder: OrderDocument
+  }> {
+    const now = new Date();
+    const startOfLast30Days = new Date();
+    startOfLast30Days.setDate(now.getDate() - 30);
+
+    const result = await this.model.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startOfLast30Days, $lte: now }
+        },
+      },
+      {
+        $sort: { total: -1 }
+      },
+      {
+        $group: {
+          _id: null,
+          accumulatedTotal: { $sum: '$total' },
+          highestSellingOrder: { $first: '$$ROOT' }
+        }
+      }
+    ]);
+
+    return {
+      lastMonthTotal: result[0].accumulatedTotal,
+      highestAmountOrder: await this.model.populate(result[0].highestSellingOrder, [
+        { path: 'client' },
+        { path: 'products' }
+      ])
+    }
   }
 }
