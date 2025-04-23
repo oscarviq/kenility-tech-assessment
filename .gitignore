@@ -47,5 +47,7 @@ vitest.config.*.timestamp*
 # Environments files
 **/.env*
 
-# File Uploads
+# Local files
 **/uploads
+/storage/*
+!/storage/.gitkeep

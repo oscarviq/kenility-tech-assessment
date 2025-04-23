@@ -1,0 +1,40 @@
+services:
+  mongo:
+    container_name: "Mongo"
+    image: mongo:4.4.6
+    volumes:
+      - ./storage/data/db:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - kenility-net
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "Kenility-API"
+    depends_on:
+      - mongo
+    volumes:
+      - ./storage/uploads:/app/dist/uploads
+    ports:
+      - 3000:3000
+    networks:
+      - kenility-net
+    environment:
+      MONGO_URI: mongodb://admin:admin@mongo:27017
+      MONGO_USER: admin
+      MONGO_PASS: admin
+      MONGO_DATABASE: kenility
+      JWT_SECRET: 3cbe8eb706f7a93feac8ff218282a60eace285a4363ee40cfbaf9cfa2d3aa5a2
+      JWT_EXPIRES: 24h
+    restart: unless-stopped
+
+networks:
+  kenility-net:
+    driver: bridge
