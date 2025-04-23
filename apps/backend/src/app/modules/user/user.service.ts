@@ -11,6 +11,10 @@ export class UserService {
     @InjectModel(User.name) private readonly model: Model<User>
   ) {}
 
+  public create(data: User): Promise<UserDocument> {
+    return this.model.create(data);
+  }
+
   public findByEmail(email: string): Promise<UserDocument | null> {
     return this.model.findOne({ email });
   }

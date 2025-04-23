@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import CryptoUtil from '../../utils/crypto';
 import { UserService } from '../user/user.service';
-import { LoginRequestSchema } from '../auth/auth.schema';
+import { LoginRequestSchema, RegisterRequestSchema } from '../auth/auth.schema';
 import { UserDocument } from '../user/user.schema';
 
 type UserWithToken = UserDocument & { accessToken: string };
@@ -16,6 +16,16 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService
   ) {}
+
+  public async register(data: z.infer<typeof RegisterRequestSchema>): Promise<UserDocument> {
+    const user = await this.userService.findByEmail(data.email);
+    if (user) throw new Error('user_exists');
+
+    return await this.userService.create({
+      ...data,
+      password: await CryptoUtil.hash(data.password)
+    });
+  }
 
   public async login(credentials: z.infer<typeof LoginRequestSchema>): Promise<UserWithToken> {
     const user: UserDocument | null =  await this.userService.findByEmail(credentials.email);

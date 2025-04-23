@@ -2,7 +2,7 @@ import { UserDocument, UserResponseSchema } from './user.schema';
 
 type UserWithToken = UserDocument & { accessToken: string };
 
-export const UserPresenter = (user: UserWithToken) => {
+export const UserPresenter = (user: UserDocument | UserWithToken) => {
   const parsed = UserResponseSchema.parse({
     id: user._id.toString(),
     email: user.email,
