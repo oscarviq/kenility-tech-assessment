@@ -2,12 +2,12 @@ import { Controller, UseGuards, Get, HttpException, HttpStatus } from '@nestjs/c
 import { AuthGuard } from '@nestjs/passport';
 import { z } from 'zod';
 
-import { ProductCreateRequestSchema } from '../product.schema';
+import { ProductResponseSchema } from '../product.schema';
 
 import { ProductService } from '../product.service';
 import { ProductPresenter } from '../product.presenter';
 
-type ProductDTO = z.infer<typeof ProductCreateRequestSchema>;
+type ProductResponseDTO = z.infer<typeof ProductResponseSchema>;
 
 @Controller('products')
 export class ProductsController {
@@ -18,7 +18,7 @@ export class ProductsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('')
-  async list(): Promise<ProductDTO[] | HttpException> {
+  async list(): Promise<ProductResponseDTO[] | HttpException> {
     try {
       const products = await this.productService.list();
       return products.map((product) => ProductPresenter(product));

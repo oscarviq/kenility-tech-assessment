@@ -6,6 +6,6 @@ export const ProductPresenter = (product: ProductDocument) => {
     name: product.name,
     sku: product.sku,
     price: product.price,
-    imagePath: product.imagePath
+    imagePath: product.imagePath || null
   });
 };

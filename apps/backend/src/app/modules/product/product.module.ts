@@ -9,7 +9,6 @@ import { MulterModuleOptions } from '../../utils/image-uploads';
 import { Product, ProductSchema } from './product.schema';
 
 // Services
-import { SeederService } from '../../services/seeder.service';
 import { ProductService } from './product.service';
 
 // Controllers
@@ -18,14 +17,9 @@ import { ProductsController } from './controllers/products.controller';
 
 @Module({
   imports: [
-    MongooseModule.forFeatureAsync([{
-      inject: [SeederService],
-      name: Product.name,
-      useFactory: async (seederService: SeederService) => {
-        await seederService.seedProducts();
-        return ProductSchema;
-      }
-    }]),
+    MongooseModule.forFeature([
+      { name: Product.name, schema: ProductSchema }
+    ]),
     MulterModule.register(MulterModuleOptions)
   ],
   controllers: [
@@ -33,6 +27,9 @@ import { ProductsController } from './controllers/products.controller';
     ProductsController
   ],
   providers: [
+    ProductService
+  ],
+  exports: [
     ProductService
   ]
 })

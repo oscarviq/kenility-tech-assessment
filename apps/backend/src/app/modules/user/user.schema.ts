@@ -4,18 +4,18 @@ import { z } from 'zod';
 
 import { ObjectIdSchema } from '../../data/common.schema';
 
-@Schema()
+@Schema({ timestamps: true })
 export class User {
-  @Prop()
+  @Prop({ required: true })
   email: string;
 
-  @Prop()
+  @Prop({ required: true })
   password: string;
 
-  @Prop()
+  @Prop({ required: true })
   firstName: string;
 
-  @Prop()
+  @Prop({ required: true })
   lastName: string;
 }
 

@@ -4,15 +4,15 @@ import { z } from 'zod';
 
 import { ObjectIdSchema } from '../../data/common.schema';
 
-@Schema()
+@Schema({ timestamps: true })
 export class Product {
-  @Prop()
+  @Prop({ required: true })
   name: string;
 
-  @Prop()
+  @Prop({ required: true })
   sku: string;
 
-  @Prop()
+  @Prop({ required: true })
   price: number;
 
   @Prop()
@@ -34,5 +34,5 @@ export const ProductResponseSchema = z.object({
   name: z.string(),
   sku: z.string(),
   price: z.preprocess((val) => Number(val), z.number()),
-  imagePath: z.string()
+  imagePath: z.string().nullable()
 });

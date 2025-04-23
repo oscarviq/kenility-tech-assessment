@@ -30,7 +30,7 @@ export class AuthController {
 
       switch (message) {
         case 'user_not_found':
-          message = 'User Not Found';
+          message = 'User not found';
           status = HttpStatus.NOT_FOUND;
           break;
         case 'invalid_credentials':

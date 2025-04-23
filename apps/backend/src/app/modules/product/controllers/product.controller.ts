@@ -7,13 +7,14 @@ import type { Express } from 'express';
 import fs from 'fs';
 
 import { ObjectIdSchema } from '../../../data/common.schema';
-import { ProductCreateRequestSchema } from '../product.schema';
+import { ProductCreateRequestSchema, ProductResponseSchema } from '../product.schema';
 import { ImageUploadPipe } from '../../../utils/image-uploads';
 
 import { ProductService } from '../product.service';
 import { ProductPresenter } from '../product.presenter';
 
-type ProductDTO = z.infer<typeof ProductCreateRequestSchema>;
+type ProductRequestDTO = z.infer<typeof ProductCreateRequestSchema>;
+type ProductResponseDTO = z.infer<typeof ProductResponseSchema>;
 
 @Controller('product')
 export class ProductController {
@@ -26,9 +27,9 @@ export class ProductController {
   @UseInterceptors(FileInterceptor('image'))
   @Post()
   async createProduct(
-    @Body(new ZodValidationPipe(ProductCreateRequestSchema)) data: ProductDTO,
+    @Body(new ZodValidationPipe(ProductCreateRequestSchema)) data: ProductRequestDTO,
     @UploadedFile(ImageUploadPipe) image: Express.Multer.File
-  ): Promise<ProductDTO | HttpException> {
+  ): Promise<ProductResponseDTO | HttpException> {
     try {
       return ProductPresenter(await this.productService.create({
         ...data,
@@ -47,7 +48,7 @@ export class ProductController {
   @Get(':id')
   async getProduct(
     @Param('id', new ZodValidationPipe(ObjectIdSchema)) id: string
-  ): Promise<ProductDTO | HttpException> {
+  ): Promise<ProductResponseDTO | HttpException> {
     try {
       const product = await this.productService.findById(id);
       if (!product) throw new HttpException('Product not found', HttpStatus.NOT_FOUND)

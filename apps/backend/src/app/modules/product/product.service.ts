@@ -34,6 +34,10 @@ export class ProductService {
     return this.model.findOne({ _id });
   }
 
+  public findManyById(ids: string[]): Promise<ProductDocument[]> {
+    return this.model.find({ _id: { $in: ids } });
+  }
+
   public list(): Promise<ProductDocument[]> {
     return this.model.find({});
   }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -12,6 +12,10 @@ import { GlobalModule } from './global.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
+import { OrderModule } from './modules/order/order.module';
+
+// Services
+import { SeederService } from './services/seeder.service';
 
 @Module({
   imports: [
@@ -32,6 +36,16 @@ import { ProductModule } from './modules/product/product.module';
     UserModule,
     AuthModule,
     ProductModule,
+    OrderModule
   ]
 })
-export class AppModule {}
+export class AppModule implements OnApplicationBootstrap {
+
+  constructor(
+    private readonly seederService: SeederService
+  ) {}
+
+  async onApplicationBootstrap(): Promise<void> {
+    await this.seederService.init();
+  }
+}
