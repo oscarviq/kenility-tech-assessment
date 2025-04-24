@@ -5,8 +5,8 @@
   "scripts": {
     "serve:backend": "nx run backend:serve:development",
     "serve:frontend": "nx run frontend:serve:development",
-    "docker:build": "./build-and-tag-docker-images.sh",
-    "docker:up": "docker compose -p kenility-oscar-viquez up -d --force-recreate"
+    "docker:build": "APP_VERSION=$(git describe --tags --always) docker compose -p oviquez-kenility build --no-cache",
+    "docker:up": "docker compose -p oviquez-kenility up -d --force-recreate"
   },
   "private": true,
   "dependencies": {

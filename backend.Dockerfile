@@ -23,6 +23,9 @@ WORKDIR /app
 COPY --from=builder /app/node_modules /app/node_modules
 COPY --from=builder /app/apps/backend/dist /app/dist
 
+# Mounts a volume for the file uploads
+VOLUME ["/app/dist/assets"]
+
 # Expose the port the app listens on
 EXPOSE 3000
 
