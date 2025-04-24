@@ -10,20 +10,29 @@ const user = reactive({ firstName: undefined, lastName: undefined });
 const stats = reactive({ lastMonthTotal: undefined, highestAmountOrder: undefined })
 
 const fetchData = async (token: string) => {
-  const { data: { lastMonthTotal, highestAmountOrder } } = await axios.get(`${import.meta.env.VITE_API_URL}/orders/stats`, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
 
-  highestAmountOrder.products = highestAmountOrder.products.map((product) => ({
-    ...product,
-    imagePath: `${import.meta.env.VITE_BACKEND_URL}/${product.imagePath}`,
-  }));
+  try {
+    const { data: { lastMonthTotal, highestAmountOrder } } = await axios.get(`${import.meta.env.VITE_API_URL}/orders/stats`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
 
-  stats.lastMonthTotal = lastMonthTotal;
-  stats.highestAmountOrder = highestAmountOrder;
-  loading.value = false;
+    highestAmountOrder.products = highestAmountOrder.products.map((product) => ({
+      ...product,
+      imagePath: `${import.meta.env.VITE_BACKEND_URL}/${product.imagePath}`,
+    }));
+
+    stats.lastMonthTotal = lastMonthTotal;
+    stats.highestAmountOrder = highestAmountOrder;
+  } catch (error) {
+
+  } finally {
+
+    loading.value = false;
+
+  }
+
 };
 
 const handleLogout = () => {
@@ -42,11 +51,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex justify-center h-full min-h-screen py-12">
-    <div
-      v-if="stats.lastMonthTotal && stats.highestAmountOrder"
-      class="px-6 md:p-0 md:w-xl space-y-6"
-    >
+  <div
+    v-if="loading"
+    class="flex justify-center h-full min-h-screen py-12"
+  >
+    <div class="flex flex-col justify-center">
+      <h1>Loading...</h1>
+    </div>
+  </div>
+
+  <div
+    v-if="!loading && (stats.lastMonthTotal && stats.highestAmountOrder)"
+    class="flex justify-center h-full min-h-screen py-12"
+  >
+    <div class="px-6 md:p-0 md:w-xl space-y-6">
       <div class="flex flex-col items-center justify-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -189,6 +207,15 @@ onMounted(() => {
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div
+    v-else
+    class="flex justify-center h-full min-h-screen py-12"
+  >
+    <div class="flex flex-col justify-center">
+      <h1>We were unable to load your data.</h1>
     </div>
   </div>
 </template>

@@ -25,7 +25,7 @@ const handleLogin = async ({ email, password }: Credentials) => {
     localStorage.setItem('accessToken', accessToken);
     router.push({ name: 'home' });
   } catch (error) {
-    const { data } = error.response;
+    const { data } = error.response || { data: { message: 'Unknown error, please try again.' } };
     alert(data.message);
   } finally {
     loading.value = false;
