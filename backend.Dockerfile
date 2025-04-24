@@ -11,7 +11,7 @@ COPY . .
 RUN npm install
 
 # Build the NestJS app
-RUN npx nx run backend:build
+RUN npx nx run backend:build:production --skip-nx-cache
 
 # --------- STAGE 2: Production image ---------
 FROM node:lts-slim
@@ -20,11 +20,11 @@ FROM node:lts-slim
 WORKDIR /app
 
 # Copy compiled app from builder stage
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/apps/backend/dist ./dist/backend
+COPY --from=builder /app/node_modules /app/node_modules
+COPY --from=builder /app/apps/backend/dist /app/dist
 
 # Expose the port the app listens on
 EXPOSE 3000
 
 # Start the NestJS app
-CMD ["node", "dist/backend/main.js"]
+CMD ["node", "dist/main.js"]

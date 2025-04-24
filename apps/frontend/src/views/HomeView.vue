@@ -16,6 +16,11 @@ const fetchData = async (token: string) => {
     }
   });
 
+  highestAmountOrder.products = highestAmountOrder.products.map((product) => ({
+    ...product,
+    imagePath: `${import.meta.env.VITE_BACKEND_URL}/${product.imagePath}`,
+  }));
+
   stats.lastMonthTotal = lastMonthTotal;
   stats.highestAmountOrder = highestAmountOrder;
   loading.value = false;
@@ -164,6 +169,7 @@ onMounted(() => {
       <div class="grid grid-cols-2 gap-6">
         <div
           v-for="product in stats.highestAmountOrder.products"
+          :key="product.id"
           class="card bg-base-100 shadow-sm"
         >
           <figure>

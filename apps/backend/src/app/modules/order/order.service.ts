@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { z } from 'zod';
 
-import { Order, OrderCreateRequestSchema, OrderDocument, OrderUpdateRequestSchema, StatsResponseSchema } from './order.schema';
+import { Order, OrderCreateRequestSchema, OrderDocument, OrderUpdateRequestSchema } from './order.schema';
 import { ProductDocument } from '../product/product.schema';
 import { UserService } from '../user/user.service';
 import { ProductService } from '../product/product.service';

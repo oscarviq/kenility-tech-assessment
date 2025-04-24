@@ -47,7 +47,6 @@ vitest.config.*.timestamp*
 # Environments files
 **/.env*
 
-# Local files
-**/uploads
+# Ignore all files in the uploads directory
 /storage/*
-!/storage/.gitkeep
+!/storage/uploads/products/default_product_image.png

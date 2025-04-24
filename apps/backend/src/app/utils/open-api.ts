@@ -5,10 +5,11 @@ import { SchemaObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.inte
 extendZodWithOpenApi(z);
 export { z };
 
-export function ZtoOAPI(name: string, schema: ZodType<any>): SchemaObject {
+export function ZtoOAPI(name: string, schema: ZodType): SchemaObject {
   const registry = new OpenAPIRegistry();
   registry.register(name, schema);
   const generator = new OpenApiGeneratorV3(registry.definitions);
   const { components } = generator.generateComponents();
+  // eslint-disable-next-line
   return components?.schemas![name] as SchemaObject;
 }

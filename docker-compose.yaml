@@ -16,12 +16,12 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: backend.Dockerfile
     container_name: "Kenility-API"
     depends_on:
       - mongo
     volumes:
-      - ./storage/uploads:/app/dist/uploads
+      - ./storage/uploads:/app/dist/assets
     ports:
       - 3000:3000
     networks:
@@ -33,6 +33,20 @@ services:
       MONGO_DATABASE: kenility
       JWT_SECRET: 3cbe8eb706f7a93feac8ff218282a60eace285a4363ee40cfbaf9cfa2d3aa5a2
       JWT_EXPIRES: 24h
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    container_name: "Kenility-Frontend"
+    depends_on:
+      - mongo
+      - api
+    ports:
+      - 8080:80
+    networks:
+      - kenility-net
     restart: unless-stopped
 
 networks:

@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "serve:dev": "nx run backend:serve:development",
-    "docker:up": "COMPOSE_BAKE=true docker compose -p kenility-oscar-viquez up -d --build --force-recreate"
+    "serve:backend": "nx run backend:serve:development",
+    "serve:frontend": "nx run frontend:serve:development",
+    "docker:build": "COMPOSE_BAKE=true docker compose -p kenility-oscar-viquez build --no-cache",
+    "docker:up": "COMPOSE_BAKE=true docker compose -p kenility-oscar-viquez up -d --force-recreate"
   },
   "private": true,
   "dependencies": {

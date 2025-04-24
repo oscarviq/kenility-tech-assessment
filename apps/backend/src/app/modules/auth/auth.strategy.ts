@@ -6,7 +6,6 @@ import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 
 import { UserService } from '../user/user.service';
-import { UserPresenter } from '../user/user.presenter';
 
 @Injectable()
 export class AuthStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -31,7 +30,10 @@ export class AuthStrategy extends PassportStrategy(Strategy, 'jwt') {
       const user = await this.userService.findByEmail(verification.username);
       if (user) this.success(verification);
       this.fail('UNAUTHORIZED', HttpStatus.BAD_REQUEST);
-    } catch (error) {
+    } catch (
+      // eslint-disable-next-line
+      error
+    ) {
       this.fail('UNAUTHORIZED', HttpStatus.BAD_REQUEST);
     }
   }

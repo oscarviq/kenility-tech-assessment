@@ -27,7 +27,7 @@ import { SeederService } from './services/seeder.service';
       onConnectionCreate: DatabaseUtil.onConnectionCreate
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
+      rootPath: join(__dirname, 'assets'),
       serveRoot: '/uploads',
     }),
 
