@@ -162,7 +162,7 @@ onMounted(() => {
 
 
         <h1 class="capitalize font-medium text-center text-gray-400">
-          Our biggest shopper bought for these items!
+          Our biggest shopper bought these items!
         </h1>
       </div>
 
